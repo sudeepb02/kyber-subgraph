@@ -1,44 +1,46 @@
-specVersion: 0.0.1
+specVersion: 0.0.2
 schema:
   file: ./schema.graphql
+#Kyber Network Proxy contract  
 dataSources:
   - kind: ethereum/contract
-    name: Contract
+    name: KyberProxyContract
     network: mainnet
     source:
       address: "0x818E6FECD516Ecc3849DAf6845e3EC868087B755"
-      abi: Contract
+      abi: KyberProxyContract
+      startBlock: 5911438
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.2
+      apiVersion: 0.0.3
       language: wasm/assemblyscript
       entities:
-        - ExecuteTrade
         - KyberNetworkSet
-        - TokenWithdraw
-        - EtherWithdraw
-        - TransferAdminPending
-        - AdminClaimed
-        - AlerterAdded
-        - OperatorAdded
       abis:
-        - name: Contract
-          file: ./abis/Contract.json
+        - name: KyberProxyContract
+          file: ./abis/KyberProxyContract.json
       eventHandlers:
-        - event: ExecuteTrade(indexed address,address,address,uint256,uint256)
-          handler: handleExecuteTrade
         - event: KyberNetworkSet(address,address)
           handler: handleKyberNetworkSet
-        - event: TokenWithdraw(address,uint256,address)
-          handler: handleTokenWithdraw
-        - event: EtherWithdraw(uint256,address)
-          handler: handleEtherWithdraw
-        - event: TransferAdminPending(address)
-          handler: handleTransferAdminPending
-        - event: AdminClaimed(address,address)
-          handler: handleAdminClaimed
-        - event: AlerterAdded(address,bool)
-          handler: handleAlerterAdded
-        - event: OperatorAdded(address,bool)
-          handler: handleOperatorAdded
       file: ./src/mapping.ts
+#Kyber Network Contract
+  - kind: ethereum/contract
+    name: KyberContract
+    network: mainnet
+    source:
+      address: "0x65bF64Ff5f51272f729BDcD7AcFB00677ced86Cd"
+      abi: KyberContract
+      startBlock: 9003563
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.3
+      language: wasm/assemblyscript
+      entities:
+        - AddReserveToNetwork
+      abis:
+        - name: KyberContract
+          file: ./abis/KyberContract.json
+      eventHandlers:
+        - event: AddReserveToNetwork(indexed address,bool,bool)
+          handler: handleAddReserveToNetwork
+      file: ./src/mapping.ts      

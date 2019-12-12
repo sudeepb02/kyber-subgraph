@@ -4,3 +4,14 @@ type ExampleEntity @entity {
   trader: Bytes! # address
   src: Bytes! # address
 }
+
+type Kyber @entity {
+  id: ID!
+  reservesCount: Int!
+}
+
+type Reserve @entity {
+  id: ID!
+  type: Int
+}
+
