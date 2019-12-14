@@ -43,4 +43,6 @@ dataSources:
       eventHandlers:
         - event: AddReserveToNetwork(indexed address,bool,bool)
           handler: handleAddReserveToNetwork
+        - event: KyberTrade(indexed address,address,address,uint256,uint256,address,uint256,address,address,bytes)
+          handler: handleKyberTrade
       file: ./src/mapping.ts      

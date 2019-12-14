@@ -7,6 +7,10 @@ type ExampleEntity @entity {
 
 type Kyber @entity {
   id: ID!
+  totalTrades: BigInt!
+  totalEthToToken: BigInt!
+  totalTokenToEth: BigInt!
+  totalTokenToToken: BigInt!
   reservesCount: Int!
 }
 

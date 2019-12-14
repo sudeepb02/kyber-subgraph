@@ -1,6 +1,6 @@
 import { BigInt } from "@graphprotocol/graph-ts"
 import { KyberProxyContract, KyberNetworkSet } from "../generated/KyberProxyContract/KyberProxyContract"
-import { KyberContract, AddReserveToNetwork } from "../generated/KyberContract/KyberContract";
+import { KyberContract, AddReserveToNetwork, KyberTrade } from "../generated/KyberContract/KyberContract";
 import { ExampleEntity,
          Kyber,
          Reserve
@@ -16,6 +16,10 @@ export function handleAddReserveToNetwork(event: AddReserveToNetwork): void {
   let kyber = Kyber.load("1")
   if (kyber == null) {
     kyber = new Kyber("1")
+    kyber.totalTrades = BigInt.fromI32(0)
+    kyber.totalEthToToken = BigInt.fromI32(0)
+    kyber.totalTokenToEth = BigInt.fromI32(0)
+    kyber.totalTokenToToken = BigInt.fromI32(0)
     kyber.reservesCount = 0
   }
   let add = event.params.add
@@ -27,8 +31,33 @@ export function handleAddReserveToNetwork(event: AddReserveToNetwork): void {
   } else {
     kyber.reservesCount = kyber.reservesCount - 1
   }
-
   kyber.save()
+}  
 
-}         
+export function handleKyberTrade(event: KyberTrade): void {
+  let ETH_TOKEN_ADDRESS = "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+  let srcToken = event.params.src.toHexString()
+  let destToken = event.params.dest.toHexString()
+
+  //Load global Kyber entity
+  let kyber = Kyber.load("1")
+  if (kyber == null) {
+    kyber = new Kyber("1")
+    kyber.totalTrades = BigInt.fromI32(0)
+    kyber.totalEthToToken = BigInt.fromI32(0)
+    kyber.totalTokenToEth = BigInt.fromI32(0)
+    kyber.totalTokenToToken = BigInt.fromI32(0)
+    kyber.reservesCount = 0
+  }
+
+  if (srcToken == ETH_TOKEN_ADDRESS) {
+    kyber.totalEthToToken = kyber.totalEthToToken.plus(BigInt.fromI32(1))
+  } else if (destToken == ETH_TOKEN_ADDRESS) {
+    kyber.totalTokenToEth = kyber.totalTokenToEth.plus(BigInt.fromI32(1))
+  } else {
+    kyber.totalTokenToToken = kyber.totalTokenToToken.plus(BigInt.fromI32(1))
+  }
+  kyber.totalTrades = kyber.totalTrades.plus(BigInt.fromI32(1))
+  kyber.save()
+}
 
