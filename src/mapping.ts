@@ -1,12 +1,17 @@
 import { BigInt } from "@graphprotocol/graph-ts"
 import { KyberProxyContract, KyberNetworkSet } from "../generated/KyberProxyContract/KyberProxyContract"
-import { KyberContract, AddReserveToNetwork, KyberTrade } from "../generated/KyberContract/KyberContract";
-import { ExampleEntity,
-         Kyber,
+import { KyberContract } from "../generated/templates";
+
+import { AddReserveToNetwork, KyberTrade } from "../generated/templates/KyberContract/KyberContract";
+
+import { Kyber,
          Reserve
          } from "../generated/schema"
 
 export function handleKyberNetworkSet(event: KyberNetworkSet): void {
+  //Whenever a new Kyber contract is set
+  //Create a dynamic data source contract from template
+  KyberContract.create(event.params.newNetworkContract)
 
 }
 

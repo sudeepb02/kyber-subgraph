@@ -24,13 +24,13 @@ dataSources:
           handler: handleKyberNetworkSet
       file: ./src/mapping.ts
 #Kyber Network Contract
-  - kind: ethereum/contract
-    name: KyberContract
+templates:
+  - name: KyberContract
+    kind: ethereum/contract
     network: mainnet
     source:
-      address: "0x65bF64Ff5f51272f729BDcD7AcFB00677ced86Cd"
+      #address: "0x65bF64Ff5f51272f729BDcD7AcFB00677ced86Cd"
       abi: KyberContract
-      startBlock: 9003563
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.3
