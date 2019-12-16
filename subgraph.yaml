@@ -15,7 +15,7 @@ dataSources:
       apiVersion: 0.0.3
       language: wasm/assemblyscript
       entities:
-        - KyberNetworkSet
+        - Kyber
       abis:
         - name: KyberProxyContract
           file: ./abis/KyberProxyContract.json
@@ -36,7 +36,8 @@ templates:
       apiVersion: 0.0.3
       language: wasm/assemblyscript
       entities:
-        - AddReserveToNetwork
+        - Kyber
+        - Reserve
       abis:
         - name: KyberContract
           file: ./abis/KyberContract.json
@@ -45,4 +46,37 @@ templates:
           handler: handleAddReserveToNetwork
         - event: KyberTrade(indexed address,address,address,uint256,uint256,address,uint256,address,address,bytes)
           handler: handleKyberTrade
+      file: ./src/mapping.ts   
+      
+#Reserve Contract template
+  - name: ReserveContract
+    kind: ethereum/contract
+    network: mainnet
+    source:
+      #address: "0x63825c174ab367968EC60f061753D3bbD36A0D8F"
+      abi: ReserveContract
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.3
+      language: wasm/assemblyscript
+      entities:
+        - Reserve
+      abis:
+        - name: ReserveContract
+          file: ./abis/ReserveContract.json
+      eventHandlers:
+        - event: DepositToken(address,uint256)
+          handler: handleDepositToken
+        - event: TradeExecute(indexed address,address,uint256,address,uint256,address)
+          handler: handleTradeExecute
+        - event: TradeEnabled(bool)
+          handler: handleTradeEnabled
+        - event: WithdrawAddressApproved(address,address,bool)
+          handler: handleWithdrawAddressApproved
+        - event: WithdrawFunds(address,uint256,address)
+          handler: handleWithdrawFunds
+        #- event: TokenWithdraw(address,uint256,address)
+        #  handler: handleTokenWithdraw
+        #- event: EtherWithdraw(uint256,address)
+        #  handler: handleEtherWithdraw
       file: ./src/mapping.ts      

@@ -1,12 +1,23 @@
 import { BigInt } from "@graphprotocol/graph-ts"
-import { KyberProxyContract, KyberNetworkSet } from "../generated/KyberProxyContract/KyberProxyContract"
-import { KyberContract } from "../generated/templates";
+import { KyberProxyContract,
+         KyberNetworkSet } from "../generated/KyberProxyContract/KyberProxyContract"
+import { KyberContract,
+         ReserveContract
+        } from "../generated/templates";
 
-import { AddReserveToNetwork, KyberTrade } from "../generated/templates/KyberContract/KyberContract";
+import { AddReserveToNetwork,
+         KyberTrade 
+        } from "../generated/templates/KyberContract/KyberContract";
+
+import { DepositToken,
+         TradeExecute,
+         TradeEnabled,
+         WithdrawAddressApproved,
+         WithdrawFunds,        
+        } from "../generated/templates/ReserveContract/ReserveContract";
 
 import { Kyber,
-         Reserve,
-         ReserveType
+         Reserve
          } from "../generated/schema"
 
 const ETH_TOKEN_ADDRESS = "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee";
@@ -15,7 +26,6 @@ export function handleKyberNetworkSet(event: KyberNetworkSet): void {
   //Whenever a new Kyber contract is set
   //Create a dynamic data source contract from template
   KyberContract.create(event.params.newNetworkContract)
-
 }
 
 export function handleAddReserveToNetwork(event: AddReserveToNetwork): void {
@@ -30,11 +40,40 @@ export function handleAddReserveToNetwork(event: AddReserveToNetwork): void {
     kyber.totalTokenToToken = BigInt.fromI32(0)
     kyber.reservesCount = 0
   }
+  //Check if Reserve Contract already exists
+  let reserve = Reserve.load(event.params.reserve.toHexString())
+
+  if (reserve == null) {
+    //Reserve contract is not being indexed,
+    //Create Reserve Contract using ReserveContract Template
+    ReserveContract.create(event.params.reserve)
+    reserve = new Reserve(event.params.reserve.toHexString())
+
+    //Initialize entity
+    if (event.params.isPermissionless == true) {
+      reserve.type = 1
+    } else {
+      reserve.type = 2
+    }
+    reserve.tradeEnabled = true
+    
+    reserve.ethDepositCount = BigInt.fromI32(0)
+    reserve.tokenDepositCount = BigInt.fromI32(0)
+    reserve.ethWithdrawCount = BigInt.fromI32(0)
+    reserve.tokenWithdrawCount = BigInt.fromI32(0)
+
+    reserve.totalEthDeposited = BigInt.fromI32(0)
+    reserve.totalEthWithdrawn = BigInt.fromI32(0)
+
+    reserve.totalTrades = BigInt.fromI32(0)
+    reserve.totalEthToToken = BigInt.fromI32(0)
+    reserve.totalTokenToEth = BigInt.fromI32(0)
+    reserve.totalTokenToToken = BigInt.fromI32(0)  
+  }
+  reserve.save()
+
   let add = event.params.add
-  //If a new reserve is being added
   if (add) {
-    let reserve = new Reserve(event.params.reserve.toHexString())
-    reserve.save()
     kyber.reservesCount = kyber.reservesCount + 1
   } else {
     kyber.reservesCount = kyber.reservesCount - 1
@@ -67,5 +106,25 @@ export function handleKyberTrade(event: KyberTrade): void {
   }
   kyber.totalTrades = kyber.totalTrades.plus(BigInt.fromI32(1))
   kyber.save()
+}
+
+export function handleDepositToken(event: DepositToken): void {
+
+}
+
+export function handleTradeExecute(event: TradeExecute): void {
+
+}
+
+export function handleTradeEnabled(event: TradeEnabled): void {
+
+}
+
+export function handleWithdrawAddressApproved(event: WithdrawAddressApproved): void {
+
+}
+
+export function handleWithdrawFunds(event: WithdrawFunds): void {
+
 }
 

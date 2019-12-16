@@ -17,7 +17,7 @@ type Kyber @entity {
 
 type Reserve @entity {
   id: ID!                       #Address of the Reserve
-  type: ReserveType!            #Reserve Type 
+  type: Int!                    #Reserve Type 
   tradeEnabled: Boolean!        #Is Trade enabled for this reserve
 
   ethDepositCount: BigInt!      #Total number of times Eth has been deposited
