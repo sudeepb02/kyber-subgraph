@@ -1,14 +1,37 @@
+enum ReserveType {
+  None,
+  Permissioned,
+  Permissionless
+}
+
 type Kyber @entity {
   id: ID!
-  totalTrades: BigInt!
-  totalEthToToken: BigInt!
-  totalTokenToEth: BigInt!
-  totalTokenToToken: BigInt!
-  reservesCount: Int!
+  totalTrades: BigInt!          #Total count of Trades executed
+  totalEthToToken: BigInt!      #Total count of Eth to Token trades
+  totalTokenToEth: BigInt!      #Total count of Token to Eth trades
+  totalTokenToToken: BigInt!    #Total count of Token to Token trades
+  reservesCount: Int!           #Total count of Reserves
+
+  #reserves: [Reserves!]! @derived from Reserve
 }
 
 type Reserve @entity {
-  id: ID!
-  type: Int
+  id: ID!                       #Address of the Reserve
+  type: ReserveType!            #Reserve Type 
+  tradeEnabled: Boolean!        #Is Trade enabled for this reserve
+
+  ethDepositCount: BigInt!      #Total number of times Eth has been deposited
+  tokenDepositCount: BigInt!    #Total number of times Token has been deposited
+  ethWithdrawCount: BigInt!     #Total number of times Eth has been withdrawn
+  tokenWithdrawCount: BigInt!   #Total number of times tokens has been withdrawn
+
+  totalEthDeposited: BigInt!    #Total eth deposited to the reserve in Wei
+  totalEthWithdrawn: BigInt!    #Total eth withdrawn from the reserve in Wei
+
+  totalTrades: BigInt!          #Total count of Trades executed
+  totalEthToToken: BigInt!      #Total count of Eth to Token trades
+  totalTokenToEth: BigInt!      #Total count of Token to Eth trades
+  totalTokenToToken: BigInt!    #Total count of Token to Token trades
+
 }
 

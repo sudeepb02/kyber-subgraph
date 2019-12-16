@@ -5,8 +5,11 @@ import { KyberContract } from "../generated/templates";
 import { AddReserveToNetwork, KyberTrade } from "../generated/templates/KyberContract/KyberContract";
 
 import { Kyber,
-         Reserve
+         Reserve,
+         ReserveType
          } from "../generated/schema"
+
+const ETH_TOKEN_ADDRESS = "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee";
 
 export function handleKyberNetworkSet(event: KyberNetworkSet): void {
   //Whenever a new Kyber contract is set
@@ -40,7 +43,7 @@ export function handleAddReserveToNetwork(event: AddReserveToNetwork): void {
 }  
 
 export function handleKyberTrade(event: KyberTrade): void {
-  let ETH_TOKEN_ADDRESS = "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+
   let srcToken = event.params.src.toHexString()
   let destToken = event.params.dest.toHexString()
 
