@@ -110,13 +110,47 @@ export function handleKyberTrade(event: KyberTrade): void {
 
 export function handleDepositToken(event: DepositToken): void {
 
+  let reserve = Reserve.load(event.address.toHexString())
+  //Additional check as Reserve entity will be created 
+  //when contract is added from template
+  if (reserve != null) {
+    if (event.params.token.toHexString() == ETH_TOKEN_ADDRESS) {
+      reserve.ethDepositCount = reserve.ethDepositCount.plus(BigInt.fromI32(1))
+      reserve.totalEthDeposited = reserve.totalEthDeposited.plus(event.params.amount)
+    } else {
+      reserve.tokenDepositCount = reserve.tokenDepositCount.plus(BigInt.fromI32(1))
+    }
+    reserve.save()
+  }
 }
 
 export function handleTradeExecute(event: TradeExecute): void {
-
+  let srcToken = event.params.src.toHexString()
+  let destToken = event.params.destToken.toHexString()
+  
+  let reserve = Reserve.load(event.address.toHexString())
+  if (reserve != null) {
+    if (srcToken == ETH_TOKEN_ADDRESS) {
+      reserve.totalEthToToken = reserve.totalEthToToken.plus(BigInt.fromI32(1))
+    } else if (destToken == ETH_TOKEN_ADDRESS) {
+      reserve.totalTokenToEth = reserve.totalTokenToEth.plus(BigInt.fromI32(1))
+    } else {
+      reserve.totalTokenToToken = reserve.totalTokenToToken.plus(BigInt.fromI32(1))
+    }
+    reserve.totalTrades = reserve.totalTrades.plus(BigInt.fromI32(1))
+    reserve.save()
+  }
 }
 
 export function handleTradeEnabled(event: TradeEnabled): void {
+  let reserve = Reserve.load(event.address.toHexString())
+  if (reserve != null) {
+    //Update status of reserve trade if it's being changed
+    if (event.params.enable != reserve.tradeEnabled) {
+      reserve.tradeEnabled = event.params.enable
+      reserve.save()
+    }
+  }
 
 }
 
@@ -126,5 +160,16 @@ export function handleWithdrawAddressApproved(event: WithdrawAddressApproved): v
 
 export function handleWithdrawFunds(event: WithdrawFunds): void {
 
+  let reserve = Reserve.load(event.address.toHexString())
+
+  if (reserve != null) {
+    if (event.params.token.toHexString() == ETH_TOKEN_ADDRESS) {
+      reserve.ethWithdrawCount = reserve.ethWithdrawCount.plus(BigInt.fromI32(1))
+      reserve.totalEthWithdrawn = reserve.totalEthWithdrawn.plus(event.params.amount)
+    } else {
+      reserve.tokenWithdrawCount = reserve.tokenWithdrawCount.plus(BigInt.fromI32(1))
+    }
+    reserve.save()
+  }
 }
 
