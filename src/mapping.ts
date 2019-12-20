@@ -18,7 +18,8 @@ import { DepositToken,
         } from "../generated/templates/ReserveContract/ReserveContract";
 
 import { Kyber,
-         Reserve
+         Reserve,
+         KyberDayData
          } from "../generated/schema"
 
 const ETH_TOKEN_ADDRESS = "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee";
@@ -107,6 +108,21 @@ export function handleKyberTrade(event: KyberTrade): void {
   }
   kyber.totalTrades = kyber.totalTrades.plus(BigInt.fromI32(1))
   kyber.save()
+
+  //Save Daily stats
+  let dayID = event.block.timestamp.div(BigInt.fromI32(86400))
+  let dayData = KyberDayData.load(dayID.toString())
+  if (dayData == null) {
+    dayData = new KyberDayData(dayID.toString())
+
+    //Initialize counts
+    dayData.totalTrades = BigInt.fromI32(0)
+    dayData.totalEthToToken = BigInt.fromI32(0)
+    dayData.totalTokenToEth = BigInt.fromI32(0)
+    dayData.totalTokenToToken = BigInt.fromI32(0)
+    dayData.totalVolumeInEth = BigInt.fromI32(0)
+  }
+  dayData.save()
 }
 
 export function handleDepositToken(event: DepositToken): void {

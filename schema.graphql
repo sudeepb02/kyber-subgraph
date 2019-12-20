@@ -35,3 +35,22 @@ type Reserve @entity {
 
 }
 
+type Token @entity {
+  id: ID!                       #Address of the token
+  symbol: String
+}
+
+type KyberDayData @entity {
+  id: ID!                       #Unique ID for day - Divide Unix Timstamp by 86400
+  
+  #Counts
+  totalTrades: BigInt!          #Total count of Trades executed
+  totalEthToToken: BigInt!      #Total count of Eth to Token trades
+  totalTokenToEth: BigInt!      #Total count of Token to Eth trades
+  totalTokenToToken: BigInt!    #Total count of Token to Token trades
+
+  #Volume
+  totalVolumeInEth: BigInt!          #Total Volume in Eth
+
+}
+
