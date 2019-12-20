@@ -46,6 +46,8 @@ templates:
           handler: handleAddReserveToNetwork
         - event: KyberTrade(indexed address,address,address,uint256,uint256,address,uint256,address,address,bytes)
           handler: handleKyberTrade
+        - event: RemoveReserveFromNetwork(address)
+          handler: handleRemoveReserveFromNetwork
       file: ./src/mapping.ts   
       
 #Reserve Contract template

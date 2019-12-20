@@ -1,4 +1,4 @@
-import { BigInt } from "@graphprotocol/graph-ts"
+import { BigInt, store } from "@graphprotocol/graph-ts"
 import { KyberProxyContract,
          KyberNetworkSet } from "../generated/KyberProxyContract/KyberProxyContract"
 import { KyberContract,
@@ -6,7 +6,8 @@ import { KyberContract,
         } from "../generated/templates";
 
 import { AddReserveToNetwork,
-         KyberTrade 
+         KyberTrade,
+         RemoveReserveFromNetwork 
         } from "../generated/templates/KyberContract/KyberContract";
 
 import { DepositToken,
@@ -173,3 +174,21 @@ export function handleWithdrawFunds(event: WithdrawFunds): void {
   }
 }
 
+export function handleRemoveReserveFromNetwork(event: RemoveReserveFromNetwork): void {
+  let reserve = Reserve.load(event.params.reserve.toHexString())
+  //Remove reserve entity
+  if (reserve != null) {
+    reserve.tradeEnabled = false
+    reserve.save()
+    store.remove("Reserve", event.params.reserve.toHexString())
+
+    //Update reserves count
+    let kyber = Kyber.load("1")
+    if (kyber != null) {
+      kyber.reservesCount = kyber.reservesCount - 1
+      kyber.save()
+    }
+  }
+
+  
+}
