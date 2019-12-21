@@ -54,3 +54,12 @@ type KyberDayData @entity {
 
 }
 
+type User @entity {
+  id: ID!                       #User address
+  totalTrades: BigInt!          #Total number of times user has transacted with the protocol
+  totalVolumeInEth: BigInt!     #Volume of user transactions in Wei
+  firstTx: BigInt!              #Timestamp of first user tx
+  lastTx: BigInt!               #Timestamp when the user last transacted with the network
+  totalGasUsed: BigInt!         #Total gas used in tx costs within the network
+}
+

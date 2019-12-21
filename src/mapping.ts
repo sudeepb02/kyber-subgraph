@@ -19,7 +19,8 @@ import { DepositToken,
 
 import { Kyber,
          Reserve,
-         KyberDayData
+         KyberDayData,
+         User
          } from "../generated/schema"
 
 const ETH_TOKEN_ADDRESS = "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee";
@@ -122,7 +123,37 @@ export function handleKyberTrade(event: KyberTrade): void {
     dayData.totalTokenToToken = BigInt.fromI32(0)
     dayData.totalVolumeInEth = BigInt.fromI32(0)
   }
+  //Increment counts
+  if (srcToken == ETH_TOKEN_ADDRESS) {
+    dayData.totalEthToToken = dayData.totalEthToToken.plus(BigInt.fromI32(1))
+  } else if (destToken == ETH_TOKEN_ADDRESS) {
+    dayData.totalTokenToEth = dayData.totalTokenToEth.plus(BigInt.fromI32(1))
+  } else {
+    dayData.totalTokenToToken = dayData.totalTokenToToken.plus(BigInt.fromI32(1))
+  }
+  dayData.totalTrades = dayData.totalTrades.plus(BigInt.fromI32(1))
+  dayData.totalVolumeInEth = dayData.totalVolumeInEth.plus(event.params.ethWeiValue)
+
   dayData.save()
+
+  //Index user data
+  //Here msg.sender and destAddress may be different, but we're useing destAddress
+  let destAddress = event.params.destAddress
+  let user = User.load(destAddress.toHexString())
+  if (user == null) {
+    user = new User(destAddress.toHexString())
+    user.totalTrades = BigInt.fromI32(0)
+    user.totalVolumeInEth = BigInt.fromI32(0)
+    user.firstTx = event.block.timestamp
+    user.lastTx = event.block.timestamp
+    user.totalGasUsed = BigInt.fromI32(0)
+  }
+  user.totalTrades = user.totalTrades.plus(BigInt.fromI32(1))
+  user.totalVolumeInEth = user.totalVolumeInEth.plus(event.params.ethWeiValue)
+  user.totalGasUsed = user.totalGasUsed.plus(event.transaction.gasUsed)
+  user.lastTx = event.block.timestamp
+  user.save()
+
 }
 
 export function handleDepositToken(event: DepositToken): void {
