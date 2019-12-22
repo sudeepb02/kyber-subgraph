@@ -10,6 +10,10 @@ function UserAnalysis() {
   const [address, setAddress] = useState("");
   const [showAnalysis, toggleShowAnalysis] = useState(false);
 
+  const useExample = () => {
+    changeAddress("0x85c5c26dc2af5546341fc1988b9d178148b4838b");
+  };
+
   const changeAddress = val => {
     setAddress(val);
 
@@ -21,17 +25,25 @@ function UserAnalysis() {
   };
 
   return (
-    <div className="d-flex flex-column user-analysis mt-5">
+    <div className="d-flex flex-column user-analysis mt-5 pb-4">
       <div className="d-flex my-2 analysis-header">
         <div className="address-analysis mr-2">address analysis</div>
-        <input class="address-input" value={address} onChange={e => changeAddress(e.target.value)} />
+        <input
+          className="address-input"
+          value={address}
+          onChange={e => changeAddress(e.target.value)}
+        />
+        <div className="position-relative">
+          <div className="position-absolute example-link" onClick={useExample}>
+            use example address
+          </div>
+        </div>
       </div>
       <div className="d-flex mt-5 flex-wrap">
         {showAnalysis && (
           <Query
             query={USER_ANALYSIS}
             variables={{
-              // id: "0x85c5c26dc2af5546341fc1988b9d178148b4838b"
               id: address
             }}
           >

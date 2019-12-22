@@ -12,8 +12,7 @@ import './App.css';
 const cache = new InMemoryCache();
 
 export const client = new ApolloClient({
-  uri: "https://api.thegraph.com/subgraphs/id/QmXpwPGunhabtrpteHU7dBSguuwTRiB131GAeqx97FxWyf",
-  // uri: "https://api.thegraph.com/subgraphs/name/sudeepb02/kyber-subgraph",
+  uri: "https://api.thegraph.com/subgraphs/name/sudeepb02/kyber-subgraph",
   cache
 });
 

@@ -45,20 +45,29 @@ td {
 }
 
 .user-analsis {
-    min-height: 400px;
+  min-height: 400px;
 }
 
 .address-input {
-    border-bottom: 1px solid white !important;
-    padding: 2px;
-    font-size: 16px;
-    width: 300px;
+  border-bottom: 1px solid white !important;
+  padding: 2px;
+  font-size: 16px;
+  width: 350px;
 }
 
 .address-input:focus {
-    outline: none !important;
+  outline: none !important;
 }
 
 .analysis-header {
-    font-size: 30px;
+  font-size: 30px;
+}
+
+.example-link {
+  left: -170px;
+  top: 50px;
+  font-size: 12px;
+  width: 200px;
+  color: yellow;
+  cursor: pointer;
 }
