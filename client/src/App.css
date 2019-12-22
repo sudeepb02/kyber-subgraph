@@ -1,0 +1,11 @@
+.App {
+  text-align: center;
+  width: 80%;
+  margin: 0 auto;
+}
+
+body {
+  background: linear-gradient(90deg, #4b6cb7 0%, #182848 100%);
+  font-family: 'Roboto Mono', monospace;
+  color: white;
+}

@@ -1,0 +1,18 @@
+.highlight {
+    width: 22%;
+}
+
+.highlight-label {
+    font-size: 16px;
+}
+
+.highlight-value {
+    font-size: 22px;
+    font-weight: bold;
+}
+
+input {
+    background-color: inherit !important;
+    border: none !important;
+    color: white;
+}
