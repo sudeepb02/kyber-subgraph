@@ -1,0 +1,64 @@
+.user-types {
+  margin-top: -12px;
+}
+.user-type {
+  margin: 0px 6px;
+  cursor: pointer;
+}
+
+.user-type {
+  padding: 10px 8px;
+  border-radius: 4px;
+}
+
+.active-type,
+.inactive-type:hover {
+  background-color: white;
+  color: black;
+}
+
+.inactive-type {
+  background: black;
+  color: white;
+}
+
+.top-users-headline {
+  font-size: 26px;
+}
+
+table {
+  border-spacing: 0;
+  /* border: 1px solid lightgrey; */
+  font-size: 12px;
+}
+
+table tr :last-child td {
+  border-bottom: 0;
+}
+
+table th,
+td {
+  margin: 0;
+  padding: 0.5rem;
+  border-bottom: 1px solid lightgrey;
+  border-right: 1px solid lightgrey;
+}
+
+.user-analsis {
+    min-height: 400px;
+}
+
+.address-input {
+    border-bottom: 1px solid white !important;
+    padding: 2px;
+    font-size: 16px;
+    width: 300px;
+}
+
+.address-input:focus {
+    outline: none !important;
+}
+
+.analysis-header {
+    font-size: 30px;
+}
